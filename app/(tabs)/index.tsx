@@ -1,75 +1,128 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React from "react";
+import { FlatList, Pressable, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+// remove expo-image import
+// import { Image } from 'expo-image';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
+import { useThemeColor } from "@/hooks/useThemeColor";
+
+type RootStackParamList = {
+  Quiz: { arenaId: string };
+};
+
+type Arena = {
+  id: string;
+  title: string;
+  description: string;
+};
+
+const arenas: Arena[] = [
+  {
+    id: "pe",
+    title: "Private Equity Analyst",
+    description: "Valuation & IRR drills",
+  },
+  {
+    id: "consulting",
+    title: "Consulting Case Interview",
+    description: "Mini-case breakdowns",
+  },
+  {
+    id: "backend",
+    title: "Backend SWE",
+    description: "Algorithmic coding",
+  },
+  {
+    id: "frontend",
+    title: "Frontend SWE",
+    description: "JS & UI puzzles",
+  },
+];
 
 export default function HomeScreen() {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const backgroundColor = useThemeColor({}, "background");
+
+  const renderArena = ({ item }: { item: Arena }) => {
+    // pick the right icon
+    let IconComponent: any = Ionicons;
+    let iconName = "help-circle-outline";
+
+    switch (item.id) {
+      case "pe":
+        IconComponent = Ionicons;
+        iconName = "cash-outline";
+        break;
+      case "consulting":
+        IconComponent = MaterialCommunityIcons;
+        iconName = "chat-processing-outline";
+        break;
+      case "backend":
+        IconComponent = Ionicons;
+        iconName = "code-slash-outline";
+        break;
+      case "frontend":
+        IconComponent = MaterialCommunityIcons;
+        iconName = "monitor-edit";
+        break;
+    }
+
+    return (
+      <Pressable
+        style={styles.card}
+        onPress={() => navigation.navigate("Quiz", { arenaId: item.id })}
+      >
+        <IconComponent name={iconName} size={48} color="#4B5563" />
+        <ThemedText type="subtitle" style={styles.cardTitle}>
+          {item.title}
+        </ThemedText>
+        <ThemedText type="default">{item.description}</ThemedText>
+      </Pressable>
+    );
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+    <SafeAreaView style={{ flex: 1, backgroundColor: backgroundColor }}>
+      <ThemedView style={styles.container}>
+        <ThemedText type="title" style={styles.header}>
+          Pick an Arena
+        </ThemedText>
+
+        <FlatList
+          data={arenas}
+          keyExtractor={(i) => i.id}
+          numColumns={2}
+          renderItem={renderArena}
+          contentContainerStyle={styles.list}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: { flex: 1, padding: 16 },
+  header: { marginBottom: 12 },
+  list: { justifyContent: "space-between" },
+  card: {
+    flex: 1,
+    margin: 8,
+    padding: 16,
+    borderRadius: 8,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
+  cardTitle: { textAlign: "center", marginBottom: 4 },
 });
