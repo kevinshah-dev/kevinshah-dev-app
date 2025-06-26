@@ -13,7 +13,8 @@ import { ThemedView } from "@/components/ThemedView";
 import { useThemeColor } from "@/hooks/useThemeColor";
 
 type RootStackParamList = {
-  Quiz: { arenaId: string };
+  quiz: { arenaId: string };
+  results: { score: number; total: number };
 };
 
 type Arena = {
@@ -77,7 +78,7 @@ export default function HomeScreen() {
     return (
       <Pressable
         style={styles.card}
-        onPress={() => navigation.navigate("Quiz", { arenaId: item.id })}
+        onPress={() => navigation.navigate("quiz", { arenaId: item.id })}
       >
         <IconComponent name={iconName} size={48} color="#4B5563" />
         <ThemedText type="subtitle" style={styles.cardTitle}>

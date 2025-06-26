@@ -5,11 +5,15 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "kevinshahdevapp",
+    "scheme": "kevinshah-dev-app",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.interviewbet.dev.app",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -37,6 +41,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "supabaseUrl": "https://izzzxzcatfnfdyqomegc.supabase.co",
+      "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6enp4emNhdGZuZmR5cW9tZWdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAxNzcxNzIsImV4cCI6MjA2NTc1MzE3Mn0.HpUyTLJK0qf0z_UynWtObPXDxYY6dyw5o6jJdS2NBrM",
+      "router": {},
+      "eas": {
+        "projectId": "26ca7ba7-0c4a-4f58-8a8f-f75c43ec2912"
+      }
     }
   }
 }
